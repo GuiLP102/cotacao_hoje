@@ -2,6 +2,7 @@ import tweepy
 from auth import tokens
 from extract_and_post.Moedas import Moeda
 from datetime import datetime
+import pytz
 
 
 class Tweet:
@@ -20,10 +21,11 @@ class Tweet:
         auth = tweepy.OAuthHandler(tokens.consumer_key, tokens.consumer_secret)
         auth.set_access_token(tokens.access_token, tokens.access_token_secret)
         api = tweepy.API(auth)
-        hora_atual = datetime.now().strftime("%H")
-        minuto_atual = datetime.now().strftime("%M")
+        time_zone = pytz.timezone('Brazil/East')
+        hora = datetime.now(time_zone).strftime("%H")
+        minutos = datetime.now(time_zone).strftime("%M")
         try:
-            api.update_status(f"🌎 Cotação das {int(hora_atual) -3}h{minuto_atual}min 🌎\n"
+            api.update_status(f"🌎 Cotação das {hora}h{minutos}min 🌎\n"
                               f"Dólar . . . . . . . . . . . . . . . . . . R$ {self.cambios()[0]}\n"
                               f"Euro . . . . . . . . . . . . . . . . . .  R$ {self.cambios()[1]}\n"
                               f"Libra . . . . . . . . . . . . . . . . . . R$ {self.cambios()[2]}\n"
